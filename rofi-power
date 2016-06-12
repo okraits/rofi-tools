@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# rofi-power
+# Use rofi to call systemctl for shutdown, reboot, etc
+
+# 2016 Oliver Kraitschy - http://okraits.de
+
+LAUNCHER='rofi -dmenu -i -p rofi-power:'
+OPTIONS="Reboot system\nPower-off system\nSuspend system\nHibernate system"
+
+# Show exit wm option if exit command is provided as an argument
+if [ ${#1} -gt 0 ]; then
+  OPTIONS="Exit window manager\n$OPTIONS"
+fi
+
+option=`echo -e $OPTIONS | $LAUNCHER | awk '{print $1}' | tr -d '\r\n'`
+if [ ${#option} -gt 0 ]
+then
+    case $option in
+      Exit)
+        eval $1
+        ;;
+      Reboot)
+        systemctl reboot
+        ;;
+      Power-off)
+        systemctl poweroff
+        ;;
+      Suspend)
+        systemctl suspend
+        ;;
+      Hibernate)
+        systemctl hibernate
+        ;;
+      *)
+        ;;
+    esac
+fi
