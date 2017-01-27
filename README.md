@@ -30,6 +30,8 @@ Append it to your rofi command line:
 
 Provides a menu to call systemctl for shutdown, reboot, suspend etc. It also
 shows an entry to exit the window manager if you provide an exit command.
+If suspend or hibernate is selected then i3lock is called to have the screen
+locked after waking up the system.
 
 ![rofi-power](rofi-power.png)
 

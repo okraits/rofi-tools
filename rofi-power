@@ -6,6 +6,7 @@
 # 2016 Oliver Kraitschy - http://okraits.de
 
 LAUNCHER='rofi -width 30 -dmenu -i -p rofi-power:'
+LOCKER='i3lock'
 OPTIONS="Reboot system\nPower-off system\nSuspend system\nHibernate system"
 
 # Show exit wm option if exit command is provided as an argument
@@ -27,10 +28,10 @@ then
         systemctl poweroff
         ;;
       Suspend)
-        systemctl suspend
+        "$LOCKER" && systemctl suspend
         ;;
       Hibernate)
-        systemctl hibernate
+        "$LOCKER" && systemctl hibernate
         ;;
       *)
         ;;
