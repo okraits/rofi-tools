@@ -31,13 +31,17 @@ Append it to your rofi command line:
 Provides a menu to call systemctl for shutdown, reboot, suspend etc. It also
 shows an entry to exit the window manager if you provide an exit command.
 If suspend or hibernate is selected then i3lock is called to have the screen
-locked after waking up the system.
+locked after waking up the system, if USE_LOCKER is set to 'true' in the config file.
+You can also change the program to be used as the screen locker by modifying the
+variable LOCKER.
 
 ![rofi-power](rofi-power.png)
 
 ### Usage
 
-Just run it and append an exit command, for i3, for example:
+Copy the *config.sample* file to *$HOME/.config/rofi-power/config* and customize it as you like.
+
+Then run *rofi-power* and append an exit command, for i3, for example:
 
     rofi-power "i3-msg exit"
 

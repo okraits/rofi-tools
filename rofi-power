@@ -5,9 +5,16 @@
 
 # 2016 Oliver Kraitschy - http://okraits.de
 
-LAUNCHER='rofi -width 30 -dmenu -i -p rofi-power:'
-LOCKER='i3lock'
 OPTIONS="Reboot system\nPower-off system\nSuspend system\nHibernate system"
+
+# source configuration or use default values
+if [ -f $HOME/.config/rofi-power/config ]; then
+  source $HOME/.config/rofi-power/config
+else
+  LAUNCHER='rofi -width 30 -dmenu -i -p rofi-power:'
+  USE_LOCKER='false'
+  LOCKER='i3lock'
+fi
 
 # Show exit wm option if exit command is provided as an argument
 if [ ${#1} -gt 0 ]; then
@@ -28,10 +35,10 @@ then
         systemctl poweroff
         ;;
       Suspend)
-        "$LOCKER" && systemctl suspend
+        $($USE_LOCKER) && "$LOCKER"; systemctl suspend
         ;;
       Hibernate)
-        "$LOCKER" && systemctl hibernate
+        $($USE_LOCKER) && "$LOCKER"; systemctl hibernate
         ;;
       *)
         ;;
