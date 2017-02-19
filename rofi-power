@@ -7,6 +7,7 @@
 # adapted by Dennis Schürholz in 2017 - https://dennisschuerholz.de
 
 # KEYWORDS can be translated in the local configuration file
+KEYWORD_LOCK="Lock screen"
 KEYWORD_REBOOT="Reboot system"
 KEYWORD_POWER="Power-off system"
 KEYWORD_SUSPEND="Suspend system"
@@ -39,7 +40,7 @@ fi
 
 if [ -z "$OPTIONS" ]; then
   # default menu structure
-  OPTIONS="%EXIT\n%REBOOT\n%POWER\n%SUSPEND\n%HIBERNATE"
+  OPTIONS="%LOCK\n%EXIT\n%REBOOT\n%POWER\n%SUSPEND\n%HIBERNATE"
 fi
 if [ "$#" -eq 0 ]; then
   # EXIT is not needed so it gets removes (incl. it's line break)
@@ -47,13 +48,16 @@ if [ "$#" -eq 0 ]; then
 fi
 
 # replace placeholder elements with actual options
-OPTIONS=`echo $OPTIONS | sed -e "s/%REBOOT/$KEYWORD_REBOOT/" -e "s/%POWER/$KEYWORD_POWER/" -e "s/%SUSPEND/$KEYWORD_SUSPEND/" -e "s/%HIBERNATE/$KEYWORD_HIBERNATE/" -e "s/%EXIT/$KEYWORD_EXIT/"`
+OPTIONS=`echo $OPTIONS | sed -e "s/%REBOOT/$KEYWORD_REBOOT/" -e "s/%POWER/$KEYWORD_POWER/" -e "s/%SUSPEND/$KEYWORD_SUSPEND/" -e "s/%HIBERNATE/$KEYWORD_HIBERNATE/" -e "s/%EXIT/$KEYWORD_EXIT/" -e "s/%LOCK/$KEYWORD_LOCK/"`
 
 wc=`echo -e $OPTIONS | wc -l`
 option=`echo -e $OPTIONS | rofi -dmenu -lines $wc $LAUNCHER_OPTIONS | tr -d '\r\n'`
 if [ ${#option} -gt 0 ]
 then
     case $option in
+      $KEYWORD_LOCK)
+        $LOCKER
+        ;;
       $KEYWORD_EXIT)
         eval $1
         ;;

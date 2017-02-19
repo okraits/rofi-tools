@@ -2,13 +2,14 @@
 
 # the options can get rearranged or removed, the final output will not contain
 # %EXIT (and it's linebreak) unless `rofi-power` is appended an exit command
-OPTIONS="%EXIT\n%REBOOT\n%POWER\n%SUSPEND\n%HIBERNATE"
+OPTIONS="%LOCK\n%EXIT\n%REBOOT\n%POWER\n%SUSPEND\n%HIBERNATE"
 # additional options can be supplied to the launcher
 LAUNCHER_OPTIONS="$LAUNCHER_OPTIONS -width 30"
 USE_LOCKER="false"
 LOCKER="i3lock"
 
 # it is even possible to rename the options
+# KEYWORD_LOCK="Lock screen"
 # KEYWORD_REBOOT="Reboot system"
 # KEYWORD_POWER="Power-off system"
 # KEYWORD_SUSPEND="Suspend system"
