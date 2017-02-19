@@ -1,4 +1,16 @@
 # configuration for rofi-power tool
-LAUNCHER="rofi -width 30 -dmenu -i -p rofi-power:"
+
+# the options can get rearranged or removed, the final output will not contain
+# %EXIT (and it's linebreak) unless `rofi-power` is appended an exit command
+OPTIONS="%EXIT\n%REBOOT\n%POWER\n%SUSPEND\n%HIBERNATE"
+# additional options can be supplied to the launcher
+LAUNCHER_OPTIONS="$LAUNCHER_OPTIONS -width 30"
 USE_LOCKER="false"
 LOCKER="i3lock"
+
+# it is even possible to rename the options
+# KEYWORD_REBOOT="Reboot system"
+# KEYWORD_POWER="Power-off system"
+# KEYWORD_SUSPEND="Suspend system"
+# KEYWORD_HIBERNATE="Hibernate system"
+KEYWORD_EXIT="Exit i3wm"
