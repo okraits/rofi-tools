@@ -23,10 +23,20 @@ if [ -f $HOME/.config/rofi-power/config ]; then
   source $HOME/.config/rofi-power/config
 fi
 
-# Show exit wm option if exit command is provided as an argument
-if [ ${#1} -gt 0 ]; then
-  OPTIONS="Exit window manager\n$OPTIONS"
+# runtime options override static config
+if [ "$ENV_OPTIONS" ]; then
+  OPTIONS=$ENV_OPTIONS
 fi
+if [ "$ENV_LAUNCHER_OPTIONS" ]; then
+  LAUNCHER_OPTIONS=$ENV_LAUNCHER_OPTIONS
+fi
+if [ "$ENV_USE_LOCKER" ]; then
+  USE_LOCKER=$ENV_USE_LOCKER
+fi
+if [ "$ENV_LOCKER" ]; then
+  LOCKER=$ENV_LOCKER
+fi
+
 if [ -z "$OPTIONS" ]; then
   # default menu structure
   OPTIONS="%EXIT\n%REBOOT\n%POWER\n%SUSPEND\n%HIBERNATE"
