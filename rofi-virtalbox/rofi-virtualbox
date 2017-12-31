@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # rofi-virtualbox: manage virtualbox machines with rofi
 
