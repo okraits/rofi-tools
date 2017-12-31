@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # rofi-power
 # Use rofi to call systemctl for shutdown, reboot, etc
