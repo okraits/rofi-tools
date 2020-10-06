@@ -4,40 +4,73 @@
 # Use rofi to call systemctl for shutdown, reboot, etc
 
 # 2016 Oliver Kraitschy - http://okraits.de
+# adapted by Dennis Schürholz in 2017 - https://dennisschuerholz.de
 
-OPTIONS="Reboot system\nPower-off system\nSuspend system\nHibernate system"
+# KEYWORDS can be translated in the local configuration file
+KEYWORD_LOCK="Lock screen"
+KEYWORD_REBOOT="Reboot system"
+KEYWORD_POWER="Power-off system"
+KEYWORD_SUSPEND="Suspend system"
+KEYWORD_HIBERNATE="Hibernate system"
+KEYWORD_EXIT="Exit window manager"
+USE_LOCKER="false"
+LOCKER="i3lock"
+# the default LAUNCHER_OPTIONS are exported to give the possibility to add
+# custom additional options in the local configuration file
+export LAUNCHER_OPTIONS="-i -p rofi-power:"
 
 # source configuration or use default values
 if [ -f $HOME/.config/rofi-power/config ]; then
   source $HOME/.config/rofi-power/config
-else
-  LAUNCHER="rofi -width 30 -dmenu -i -p rofi-power:"
-  USE_LOCKER="false"
-  LOCKER="i3lock"
 fi
 
-# Show exit wm option if exit command is provided as an argument
-if [ ${#1} -gt 0 ]; then
-  OPTIONS="Exit window manager\n$OPTIONS"
+# runtime options override static config
+if [ "$ENV_OPTIONS" ]; then
+  OPTIONS=$ENV_OPTIONS
+fi
+if [ "$ENV_LAUNCHER_OPTIONS" ]; then
+  LAUNCHER_OPTIONS=$ENV_LAUNCHER_OPTIONS
+fi
+if [ "$ENV_USE_LOCKER" ]; then
+  USE_LOCKER=$ENV_USE_LOCKER
+fi
+if [ "$ENV_LOCKER" ]; then
+  LOCKER=$ENV_LOCKER
 fi
 
-option=`echo -e $OPTIONS | $LAUNCHER | awk '{print $1}' | tr -d '\r\n'`
+if [ -z "$OPTIONS" ]; then
+  # default menu structure
+  OPTIONS="%LOCK\n%EXIT\n%REBOOT\n%POWER\n%SUSPEND\n%HIBERNATE"
+fi
+if [ "$#" -eq 0 ]; then
+  # EXIT is not needed so it gets removes (incl. it's line break)
+  OPTIONS=`echo $OPTIONS | sed -e 's/%EXIT\\\\n//g' -e 's/\\\\n%EXIT//g' -e 's/%EXIT\\\\r\\\\n//g' -e 's/\\\\r\\\\n%EXIT//g'`
+fi
+
+# replace placeholder elements with actual options
+OPTIONS=`echo $OPTIONS | sed -e "s/%REBOOT/$KEYWORD_REBOOT/" -e "s/%POWER/$KEYWORD_POWER/" -e "s/%SUSPEND/$KEYWORD_SUSPEND/" -e "s/%HIBERNATE/$KEYWORD_HIBERNATE/" -e "s/%EXIT/$KEYWORD_EXIT/" -e "s/%LOCK/$KEYWORD_LOCK/"`
+
+wc=`echo -e $OPTIONS | wc -l`
+option=`echo -e $OPTIONS | rofi -dmenu -lines $wc $LAUNCHER_OPTIONS | tr -d '\r\n'`
 if [ ${#option} -gt 0 ]
 then
     case $option in
-      Exit)
+      $KEYWORD_LOCK)
+        $LOCKER
+        ;;
+      $KEYWORD_EXIT)
         eval $1
         ;;
-      Reboot)
+      $KEYWORD_REBOOT)
         systemctl reboot
         ;;
-      Power-off)
+      $KEYWORD_POWER)
         systemctl poweroff
         ;;
-      Suspend)
+      $KEYWORD_SUSPEND)
         $($USE_LOCKER) && "$LOCKER"; systemctl suspend
         ;;
-      Hibernate)
+      $KEYWORD_HIBERNATE)
         $($USE_LOCKER) && "$LOCKER"; systemctl hibernate
         ;;
       *)
