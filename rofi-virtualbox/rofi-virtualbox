@@ -41,11 +41,11 @@ LAUNCHER="rofi -dmenu -i -l 40 -p"
 while true
 do
   # select machine to control
-  vm=$(vmsList | $LAUNCHER 'Select machine:')
+  vm=$(vmsList | $LAUNCHER 'Select machine')
   retval=$?
   [ $retval -ne 0 ] && exit $retval
   # select action to be executed
-  option=$(echo -e $OPTIONS | $LAUNCHER 'Select action:')
+  option=$(echo -e $OPTIONS | $LAUNCHER 'Select action')
   retval=$?
   [ $retval -ne 0 ] && exit $retval
   case "$option" in

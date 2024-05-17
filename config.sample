@@ -1,4 +1,4 @@
 # configuration for rofi-power tool
-LAUNCHER="rofi -width 30 -dmenu -i -p rofi-power:"
+LAUNCHER="rofi -width 30 -dmenu -i -p rofi-power"
 USE_LOCKER="false"
 LOCKER="i3lock"
